@@ -1,0 +1,60 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+h1 {
+  color: blue;
+}
+
+footer {
+  margin-top: 24px;
+}
+
+#titulo-dom {
+  color: yellow;
+}
+
+.inativo {
+  display: none;
+}
+
+table {
+  border-spacing: 10px;
+}
+button.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.erro{
+  background-color:red;
+  color: white;
+  text-align: center;
+  width: 300px;
+  margin-bottom: 5%;
+  margin-left: 40%;
+  border-radius: 4px ;
+  max-width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 2s
+}
+.sucesso{
+  background-color: green;
+  color: white;
+  text-align: center;
+  width: 300px;
+  margin-bottom: 5%;
+  margin-left: 40%;
+  border-radius: 4px ;
+  max-width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 2s;
+}
+.hidden{
+  display: none;
+}
