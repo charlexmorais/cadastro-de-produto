@@ -60,22 +60,37 @@ function clearForm() {
 }
 
 /* Verificando se todos os campos do form estão preenchidos */
+function checkCode(code) {
+  // Suponha que o array products contém todos os produtos salvos
+  const foundProduct = listaProducts.find((product) => product.code === code);
+  if (foundProduct) {
+    throw new Error("Já existe um produto com esse código.");
+  }
+}
+
 function validarFormulario() {
   if (
     inputCode.value === "" ||
+    inputCode.value.length > 4 ||
     inputNameproduct.value === "" ||
     inputdescription.value === "" ||
     inputPrice.value === ""
   ) {
-    // alert("Por favor, preencha todos os campos.");
     mensagem("erro", "Por favor, preencha todos os campos.");
-    clearForm();
+    clearForm(); // limpa formulario
   } else {
-    saveProduct();
-    mensagem("sucesso", "Salvo com sucesso");
-    clearForm();
+    try {
+      checkCode(inputCode.value); // checa se o codigo do produto repetiu 
+      saveProduct();
+      mensagem("sucesso", "Salvo com sucesso");
+      clearForm();
+    } catch (error) {
+      mensagem("erro", error.message);
+      clearForm();
+    }
   }
 }
+
 // funcoes alerta de mensagens
 
 function mensagem(tipo, mensagem) {
@@ -93,26 +108,14 @@ function mensagem(tipo, mensagem) {
   }, 1000);
 }
 
-
-// validando campos de preenchimento de codigo e preço
-function validateFields() {
-  if (inputCode.value.length !== 4 || inputPrice.value.length > 11) {
-    mensagem("erro", "Por favor preencha corretamente os campos do cadastro");
-
-    location.reload(); // atualizando a pagina
-  } else {
-    validateCode();
-  }
-}
-
 // validando codigo do produto
 function validateCode() {
   let checkCode = false;
   let productCode = document.getElementById("product-code").value;
 
   if (listaProducts.length === 0) {
-    
     mensagem("sucesso", "Produto salvo com sucesso.");
+
     fistSection.setAttribute("hidden", "");
     firstFooter.setAttribute("hidden", "");
     alert("clique em concluir ou adicione mais produtos!");
@@ -129,7 +132,6 @@ function validateCode() {
       mensagem("erro", "O código digitado é igual a um código anterior.");
 
       if (confirm("Deseja continuar? Não")) {
-        
         mensagem("sucesso", "Produto salvo com sucesso.");
       } else {
         location.reload(); // atualizando a pagina
@@ -141,7 +143,7 @@ function validateCode() {
 function completeRegistration() {
   if (listaProducts.length === 0) {
     clearForm();
-    mensagem("erro"," Voce nao possui produtos na sua lista")
+    mensagem("erro", " Voce nao possui produtos na sua lista");
   } else {
     const confirmed = confirm("Realmente quer concluir o cadastramento?");
     if (confirmed) {
@@ -156,14 +158,14 @@ function completeRegistration() {
 // finaliazndo cadastro  e exibindo lista de produtos
 function finalizeRegistration() {
   tableList.innerHTML = "";
+  let isFirstProduct = true;
   for (let product of listaProducts) {
     tableList.innerHTML += `
-      <tr>
-        <th>Código-</th>
-        <th>Produto-</th>
-        <th>Descrição-</th>
-        <th>Preço</th>
-      </tr> 
+      ${
+        isFirstProduct
+          ? "<tr><th>Código</th><th>Produto</th><th>Descrição</th><th>Preço</th></tr>"
+          : ""
+      }
       <tr>
         <td>${product.code}</td>
         <td>${product.name}</td>
@@ -171,9 +173,11 @@ function finalizeRegistration() {
         <td>${product.price}</td>
       </tr>
     `;
+    isFirstProduct = false;
   }
 
   tableListproducts();
+  buttonDelete.disabled = listaProducts.length === 0;
 }
 
 // formatando moeda
@@ -204,8 +208,8 @@ function formFields() {
 function deleteList() {
   sectionListproducts.remove(); //removendo lista de produtos
   // location.reload(); // voltando ao formulario
-    mensagem("sucesso", "A sua lista foi excluida");
-    formFields()
+  mensagem("sucesso", "A sua lista foi excluida");
+  formFields();
 }
 // botoes de eventos
 buttonSave.onclick = () => {
@@ -213,12 +217,14 @@ buttonSave.onclick = () => {
 };
 
 buttonFinish.onclick = () => {
-  clearForm()
+  clearForm();
   completeRegistration(); // concluindo cadastro
+  finalizeRegistration();
 };
 buttonBack.onclick = () => {
   formFields(); // mostrando formulario
 };
 buttonDelete.onclick = () => {
   deleteList(); //  deletando produtos e voltando ao formulario
+  location.reload(); // voltando ao formulario
 };

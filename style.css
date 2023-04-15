@@ -19,7 +19,29 @@ footer {
 
 table {
   border-spacing: 10px;
+  margin-bottom: 20px;
+
+
 }
+
+th{
+  border: solid 1px black;
+}
+
+td{
+ 
+  text-align: center;
+  border: solid 1px black;
+  background-color: antiquewhite ;
+  
+
+}
+th {
+  
+  padding: 3px;
+
+}
+
 button.disabled {
   opacity: 0.5;
   pointer-events: none;
@@ -57,4 +79,19 @@ button.disabled {
 }
 .hidden{
   display: none;
+}
+@media (max-width: 370px) {
+  
+  .erro {
+    margin-left: 10px;
+    margin-top: 20px;
+   
+    
+  }
+  .sucesso{
+    margin-left: 10px;
+    margin-top: 20px;
+   
+    
+  }
 }
